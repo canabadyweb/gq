@@ -138,7 +138,7 @@ def get_messages(service, query):
     return messages
 
 
-def retrieve_messages(service, messages):
+def retrieve_messages(service, messages, mark):
     """
        Code based on gmail_read.py from:
        https://github.com/abhishekchhibber/Gmail-Api-through-Python/
@@ -216,6 +216,14 @@ def retrieve_messages(service, messages):
 
         # This will create a dictonary item in the final list
         messages_list.append(temp_dict)
+
+        if mark:
+            # This will mark the messagea as read
+
+            to_remove = {'removeLabelIds': ['UNREAD']}
+            service.users().messages().modify(userId=user_id,
+                                              id=m_id,
+                                              body=to_remove).execute()
 
     return(messages_list)
 

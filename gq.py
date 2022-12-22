@@ -19,6 +19,9 @@ import gqlib
 @click.option("-r", "--retrieve",
               is_flag=True,
               help="Retrieve message that matches the query")
+@click.option("-m", "--mark",
+              is_flag=True,
+              help="Mark messages as READ that matches the query")
 @click.option("-e", "--export",
               is_flag=True,
               help="Export retrieved messages")
@@ -28,7 +31,8 @@ import gqlib
 @click.option("-o", "--output",
               default='auto',
               help="Output filename to export retrieved messages")
-def menu(user, profile, credentials, query, retrieve, export, format, output):
+def menu(user, profile, credentials, query, retrieve,
+         mark, export, format, output):
 
     try:
         if credentials:
@@ -45,7 +49,8 @@ def menu(user, profile, credentials, query, retrieve, export, format, output):
             if retrieve:
                 print(f"Retrieving {num_messages} messages...")
 
-                messages_list = gqlib.retrieve_messages(service, messages)
+                messages_list = gqlib.retrieve_messages(service,
+                                                        messages, mark)
                 # print("Total messaged retrieved: ", str(len(messages_list)))
                 # print(messages_list)
 
