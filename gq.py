@@ -12,14 +12,21 @@ import gqlib
 @click.option("-u", "--user",
               default=None,
               help="Gmail username")
-def menu(user, profile, credentials):
+@click.option("-q", "--query",
+              default="is:unread",
+              help="""Gmail search query
+              More info: https://support.google.com/mail/answer/7190?hl=en""")
+def menu(user, profile, credentials, query):
 
     try:
         if credentials:
             gqlib.create_or_update_profile(user, profile, credentials)
 
         if user:
-            gqlib.auth(user, profile)
+            service = gqlib.auth(user, profile)
+            messages = gqlib.get_messages(service, query)
+
+            print(f"Query ('{query}') matches {len(messages)} message(s)")
 
     except Exception as e:
         print(e)
