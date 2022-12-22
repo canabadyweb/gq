@@ -11,7 +11,10 @@ import gqlib
 @click.option("-p", "--profile",
               default='default',
               help="Profile for client config (Default: default)")
-def menu(credentials, profile):
+@click.option("-u", "--user",
+              default=None,
+              help="Gmail username")
+def menu(credentials, profile, user):
 
     try:
         if credentials:
@@ -32,6 +35,8 @@ def menu(credentials, profile):
                                      installed_config['client_id'])
                     gqlib.config.set(profile, 'client_secret',
                                      installed_config['client_secret'])
+                    gqlib.config.set(profile, 'auth_uri',
+                                     installed_config['auth_uri'])
                     gqlib.config.set(profile, 'token_uri',
                                      installed_config['token_uri'])
                     gqlib.config.set(profile, 'scopes',
@@ -43,6 +48,9 @@ def menu(credentials, profile):
 
             else:
                 print(f"Error: {credentials} doesn't exists.")
+
+        if user:
+            gqlib.auth(user, profile)
 
     except Exception as e:
         print(e)
