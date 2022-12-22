@@ -22,7 +22,7 @@ def menu(credentials, profile):
                     client_config_dict = json.loads(client_config.read())
                     # print(client_config_dict)
 
-                    if not os.path.isfile(gqlib.user_config):
+                    if not os.path.isfile(gqlib.user_config_file):
                         os.makedirs(gqlib.user_config_dir, exist_ok=True)
 
                     installed_config = client_config_dict['installed']
@@ -38,7 +38,7 @@ def menu(credentials, profile):
                                      'https://mail.google.com/')
 
                     # write configuration to gq.ini
-                    with open(gqlib.user_config, 'w') as config_file:
+                    with open(gqlib.user_config_file, 'w') as config_file:
                         gqlib.config.write(config_file)
 
             else:
