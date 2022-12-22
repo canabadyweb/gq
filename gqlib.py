@@ -207,7 +207,7 @@ def retrieve_messages(service, messages, mark):
             # depending on the end user's requirements,
             # it can be further cleaned
             # using regex, beautiful soup, or any other method
-            temp_dict['Message_body'] = message_body
+            temp_dict['Message_body'] = str(message_body)
 
         except Exception:
             pass
