@@ -27,6 +27,9 @@ def create_or_update_profile(user, profile, credentials):
 
                 installed_config = client_config_dict['installed']
 
+                # Read config file prior to update
+                config.read(user_config_file)
+
                 add_section_if_not_exists(config, profile)
                 config.set(profile, 'client_id', installed_config['client_id'])
                 config.set(profile, 'client_secret',
