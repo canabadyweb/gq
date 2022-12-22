@@ -39,26 +39,27 @@ def menu(user, profile, credentials, query, retrieve,
             gqlib.create_or_update_profile(user, profile, credentials)
 
         if user:
-            service = gqlib.auth(user, profile)
-            messages = gqlib.get_messages(service, query)
+            if format not in ['csv', 'json']:
+                print(f"Error: Unsupported output file format: '{format}'")
+            else:
+                service = gqlib.auth(user, profile)
+                messages = gqlib.get_messages(service, query)
 
-            num_messages = len(messages)
+                num_messages = len(messages)
 
-            print(f"Query ('{query}') matches {num_messages} message(s)")
+                print(f"Query ('{query}') matches {num_messages} message(s)")
 
-            if retrieve:
-                print(f"Retrieving {num_messages} messages...")
+                if retrieve:
+                    print(f"Retrieving {num_messages} messages...")
 
-                messages_list = gqlib.retrieve_messages(service,
-                                                        messages, mark)
-                # print("Total messaged retrieved: ", str(len(messages_list)))
-                # print(messages_list)
+                    messages_list = gqlib.retrieve_messages(service,
+                                                            messages, mark)
 
-                if export:
-                    gqlib.export_messages(user, query,
-                                          messages_list, format, output)
-                else:
-                    print(messages_list)
+                    if export:
+                        gqlib.export_messages(user, query,
+                                              messages_list, format, output)
+                    else:
+                        print(messages_list)
 
     except Exception as e:
         print(e)

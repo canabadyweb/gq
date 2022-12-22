@@ -267,4 +267,4 @@ def export_messages(user, query, messages_list, format, output):
 
                 print(f"Messages exported to '{output}'")
     else:
-        print(f"Invalid output file format; {format}")
+        print(f"Error: Unsupported output file format: '{format}'")
