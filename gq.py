@@ -26,7 +26,7 @@ def menu(credentials):
             if os.path.exists(credentials):
                 with open(credentials) as client_config:
                     client_config_dict = json.loads(client_config.read())
-                    print(client_config_dict)
+                    # print(client_config_dict)
 
                     if not os.path.isfile(user_config):
                         os.makedirs(user_config_dir, exist_ok=True)
