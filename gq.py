@@ -13,7 +13,10 @@ config = configparser.ConfigParser()
 @click.command()
 @click.option("-c", "--credentials",
                     help="Enter 'credentials.json' location")
-def menu(credentials):
+@click.option("-p", "--profile",
+              default='default',
+              help="Profile for client config (Default: default)")
+def menu(credentials, profile):
 
     try:
         if credentials:
@@ -29,14 +32,14 @@ def menu(credentials):
 
                     installed_config = client_config_dict['installed']
 
-                    gqlib.add_section_if_not_exists(config, 'gq')
-                    config.set('gq', 'client_id',
+                    gqlib.add_section_if_not_exists(config, profile)
+                    config.set(profile, 'client_id',
                                installed_config['client_id'])
-                    config.set('gq', 'client_secret',
+                    config.set(profile, 'client_secret',
                                installed_config['client_secret'])
-                    config.set('gq', 'token_uri',
+                    config.set(profile, 'token_uri',
                                installed_config['token_uri'])
-                    config.set('gq', 'scope',
+                    config.set(profile, 'scope',
                                'https://mail.google.com/')
 
                     # write configuration to gq.ini
