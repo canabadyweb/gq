@@ -16,6 +16,9 @@ import gqlib
               default="is:unread",
               help="""Gmail search query
               More info: https://support.google.com/mail/answer/7190?hl=en""")
+@click.option("-r", "--retrieve",
+              is_flag=True,
+              help="Retrieve message that matches the query")
 @click.option("-e", "--export",
               is_flag=True,
               help="Export retrieved messages")
@@ -25,7 +28,7 @@ import gqlib
 @click.option("-o", "--output",
               default='auto',
               help="Output filename to export retrieved messages")
-def menu(user, profile, credentials, query, export, format, output):
+def menu(user, profile, credentials, query, retrieve, export, format, output):
 
     try:
         if credentials:
@@ -35,15 +38,20 @@ def menu(user, profile, credentials, query, export, format, output):
             service = gqlib.auth(user, profile)
             messages = gqlib.get_messages(service, query)
 
-            print(f"Query ('{query}') matches {len(messages)} message(s)")
+            num_messages = len(messages)
 
-            messages_list = gqlib.retrieve_messages(service, messages)
-            # print("Total messaged retrieved: ", str(len(messages_list)))
-            # print(messages_list)
+            print(f"Query ('{query}') matches {num_messages} message(s)")
 
-            if export:
-                gqlib.export_messages(user, query,
-                                      messages_list, format, output)
+            if retrieve:
+                print(f"Retrieving {num_messages} messages...")
+
+                messages_list = gqlib.retrieve_messages(service, messages)
+                # print("Total messaged retrieved: ", str(len(messages_list)))
+                # print(messages_list)
+
+                if export:
+                    gqlib.export_messages(user, query,
+                                          messages_list, format, output)
 
     except Exception as e:
         print(e)
