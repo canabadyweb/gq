@@ -3,15 +3,11 @@ import click
 import json
 import traceback
 import configparser
+import gqlib
 
 user_config_dir = os.path.expanduser("~") + "/.config/gq"
 user_config = user_config_dir + "/gq.ini"
 config = configparser.ConfigParser()
-
-
-def add_section_if_not_exists(config, section_name):
-    if not config.has_section(section_name):
-        config.add_section(section_name)
 
 
 @click.command()
@@ -33,7 +29,7 @@ def menu(credentials):
 
                     installed_config = client_config_dict['installed']
 
-                    add_section_if_not_exists(config, 'gq')
+                    gqlib.add_section_if_not_exists(config, 'gq')
                     config.set('gq', 'client_id',
                                installed_config['client_id'])
                     config.set('gq', 'client_secret',
