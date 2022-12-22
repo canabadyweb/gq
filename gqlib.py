@@ -218,3 +218,45 @@ def retrieve_messages(service, messages):
         messages_list.append(temp_dict)
 
     return(messages_list)
+
+
+def get_output_filename(user, query, format):
+    # Replace special chars in query string with '_'
+    import re
+    query = re.sub(r'[^a-zA-Z0-9_\-]', '_', query)
+
+    # Get current timestamp
+    import datetime
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
+    filename = '_'.join([user, query, timestamp])
+    filename = filename.replace(' ', '_')
+
+    return '.'.join([filename, format])
+
+
+def export_messages(user, query, messages_list, format, output):
+    if output == 'auto':
+        output = get_output_filename(user, query, format)
+
+    if format in ['csv', 'json']:
+
+        if format == 'json':
+            with open(output, "w") as jsonfile:
+                json.dump(messages_list, jsonfile, indent=6)
+                print(f"Messages exported to '{output}'")
+
+        if format == 'csv':
+            with open(output, 'w', encoding='utf-8',
+                      newline='\n') as csvfile:
+                import csv
+                fieldnames = ['Sender', 'Subject',
+                              'Date', 'Snippet', 'Message_body']
+                writer = csv.DictWriter(csvfile,
+                                        fieldnames=fieldnames, delimiter=',')
+                writer.writeheader()
+                for val in messages_list:
+                    writer.writerow(val)
+
+                print(f"Messages exported to '{output}'")
+    else:
+        print(f"Invalid output file format; {format}")
