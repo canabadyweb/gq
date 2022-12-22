@@ -57,6 +57,8 @@ def menu(user, profile, credentials, query, retrieve,
                 if export:
                     gqlib.export_messages(user, query,
                                           messages_list, format, output)
+                else:
+                    print(messages_list)
 
     except Exception as e:
         print(e)
