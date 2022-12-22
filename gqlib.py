@@ -1,4 +1,5 @@
 import os
+import json
 import configparser
 
 user_config_dir = os.path.expanduser("~") + "/.config/gq"
@@ -9,6 +10,37 @@ config = configparser.ConfigParser()
 def add_section_if_not_exists(config, section_name):
     if not config.has_section(section_name):
         config.add_section(section_name)
+
+
+def create_or_update_profile(user, profile, credentials):
+
+    if credentials:
+        credentials = os.path.expanduser(credentials)
+
+        if os.path.exists(credentials):
+            with open(credentials) as client_config:
+                client_config_dict = json.loads(client_config.read())
+                # print(client_config_dict)
+
+                if not os.path.isfile(user_config_file):
+                    os.makedirs(user_config_dir, exist_ok=True)
+
+                installed_config = client_config_dict['installed']
+
+                add_section_if_not_exists(config, profile)
+                config.set(profile, 'client_id', installed_config['client_id'])
+                config.set(profile, 'client_secret',
+                           installed_config['client_secret'])
+                config.set(profile, 'auth_uri', installed_config['auth_uri'])
+                config.set(profile, 'token_uri', installed_config['token_uri'])
+                config.set(profile, 'scopes', 'https://mail.google.com/')
+
+                # write configuration to gq.ini
+                with open(user_config_file, 'w') as config_file:
+                    config.write(config_file)
+
+        else:
+            print(f"Error: {credentials} doesn't exists.")
 
 
 def auth(user, profile='default'):
