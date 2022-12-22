@@ -120,14 +120,101 @@ def auth(user, profile='default'):
 
 
 def get_messages(service, query):
+    """
+       Code based on main.py from:
+       https://github.com/ghaksf39/gmail-imap-login/blob/main/main.py
+    """
     result = service.users().messages().list(userId='me', q=query).execute()
     messages = []
     if 'messages' in result:
         messages.extend(result['messages'])
     while 'nextPageToken' in result:
         page_token = result['nextPageToken']
-        result = service.users().messages().list(userId='me', q=query,
-                                                 pageToken=page_token).execute()
+        result = service.users().messages().list(
+                                        userId='me', q=query,
+                                        pageToken=page_token).execute()
         if 'messages' in result:
             messages.extend(result['messages'])
     return messages
+
+
+def retrieve_messages(service, messages):
+    """
+       Code based on gmail_read.py from:
+       https://github.com/abhishekchhibber/Gmail-Api-through-Python/
+    """
+    import base64
+    from bs4 import BeautifulSoup
+    import dateutil.parser as parser
+
+    user_id = 'me'
+    messages_list = []
+
+    for message in messages:
+        temp_dict = {}
+        m_id = message['id']  # get id of individual message
+
+        # fetch the message using API
+        message = service.users().messages().get(userId=user_id,
+                                                 id=m_id).execute()
+        payld = message['payload']  # get payload of the message
+        headr = payld['headers']  # get header of the payload
+
+        for one in headr:  # getting the Subject
+            if one['name'] == 'Subject':
+                msg_subject = one['value']
+                temp_dict['Subject'] = msg_subject
+            else:
+                pass
+
+        for two in headr:  # getting the date
+            if two['name'] == 'Date':
+                msg_date = two['value']
+                date_parse = (parser.parse(msg_date))
+                m_date = (date_parse.date())
+                temp_dict['Date'] = str(m_date)
+            else:
+                pass
+
+        for three in headr:  # getting the Sender
+            if three['name'] == 'From':
+                msg_from = three['value']
+                temp_dict['Sender'] = msg_from
+            else:
+                pass
+
+        temp_dict['Snippet'] = message['snippet']  # fetching message snippet
+
+        try:
+
+            # Fetching message body
+            message_parts = payld['parts']  # fetching the message parts
+            part_one = message_parts[0]  # fetching first element of the part
+            part_body = part_one['body']  # fetching body of the message
+            part_data = part_body['data']  # fetching data from the body
+
+            # decoding from Base64 to UTF-8
+            clean_one = part_data.replace("-", "+")
+
+            # decoding from Base64 to UTF-8
+            clean_one = clean_one.replace("_", "/")
+
+            # decoding from Base64 to UTF-8
+            clean_two = base64.b64decode(bytes(clean_one, 'UTF-8'))
+            soup = BeautifulSoup(clean_two, "lxml")
+            message_body = soup.body()
+            # message_body is a readible form of message body
+            # depending on the end user's requirements,
+            # it can be further cleaned
+            # using regex, beautiful soup, or any other method
+            temp_dict['Message_body'] = message_body
+
+        except Exception:
+            pass
+
+        # print(temp_dict)
+
+        # This will create a dictonary item in the final list
+        messages_list.append(temp_dict)
+
+    return(messages_list)

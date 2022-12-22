@@ -28,6 +28,10 @@ def menu(user, profile, credentials, query):
 
             print(f"Query ('{query}') matches {len(messages)} message(s)")
 
+            messages_list = gqlib.retrieve_messages(service, messages)
+            # print("Total messaged retrieved: ", str(len(messages_list)))
+            # print(messages_list)
+
     except Exception as e:
         print(e)
         traceback.print_exc()
