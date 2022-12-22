@@ -34,7 +34,7 @@ def menu(credentials, profile):
                                      installed_config['client_secret'])
                     gqlib.config.set(profile, 'token_uri',
                                      installed_config['token_uri'])
-                    gqlib.config.set(profile, 'scope',
+                    gqlib.config.set(profile, 'scopes',
                                      'https://mail.google.com/')
 
                     # write configuration to gq.ini
