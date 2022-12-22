@@ -16,13 +16,16 @@ import gqlib
               default="is:unread",
               help="""Gmail search query
               More info: https://support.google.com/mail/answer/7190?hl=en""")
+@click.option("-e", "--export",
+              is_flag=True,
+              help="Export retrieved messages")
 @click.option("-f", "--format",
               default='csv',
               help="Output file format. Possible values are [csv, json]")
 @click.option("-o", "--output",
               default='auto',
               help="Output filename to export retrieved messages")
-def menu(user, profile, credentials, query, format, output):
+def menu(user, profile, credentials, query, export, format, output):
 
     try:
         if credentials:
@@ -38,7 +41,7 @@ def menu(user, profile, credentials, query, format, output):
             # print("Total messaged retrieved: ", str(len(messages_list)))
             # print(messages_list)
 
-            if output:
+            if export:
                 gqlib.export_messages(user, query,
                                       messages_list, format, output)
 
