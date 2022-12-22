@@ -12,7 +12,7 @@ import gqlib
 @click.option("-u", "--user",
               default=None,
               help="Gmail username")
-def menu(credentials, profile, user):
+def menu(user, profile, credentials):
 
     try:
         if credentials:
