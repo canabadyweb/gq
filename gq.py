@@ -40,6 +40,8 @@ def menu(credentials):
                                installed_config['client_secret'])
                     config.set('gq', 'token_uri',
                                installed_config['token_uri'])
+                    config.set('gq', 'scope',
+                               'https://mail.google.com/')
 
                     # write configuration to gq.ini
                     with open(user_config, 'w') as config_file:
