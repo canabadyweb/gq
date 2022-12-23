@@ -1,0 +1,6 @@
+beautifulsoup4==4.8.2
+google-api-python-client==1.7.8
+google-auth==1.35.0
+google-auth-httplib2==0.1.0
+google-auth-oauthlib==0.4.6
+lxml==4.6.3
