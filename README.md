@@ -45,7 +45,7 @@ Usage: gq.py [OPTIONS]
 Options:
   -c, --credentials TEXT  Enter 'credentials.json' location
   -p, --profile TEXT      Profile for client config (Default: default)
-  -u, --user TEXT         Gmail username
+  -u, --user TEXT         Label for Gmail username
   -q, --query TEXT        Gmail search query More info:
                           https://support.google.com/mail/answer/7190?hl=en
   -r, --retrieve          Retrieve message that matches the query
@@ -58,15 +58,15 @@ Options:
 
 ## Usage
 
-#### Prior to querying Gmail, we have load ```credentails.json``` using -c option. 
+#### Prior to querying Gmail, we have to load ```credentails.json``` using -c option. 
 (Need only for first time or if we want to change the credentials)
 See: 
-[How to get Google Client ID and Client Secret?](https://www.balbooa.com/gridbox-documentation/how-to-get-google-client-id-and-client-secret) for more information to create and download credentials.json.
+[How to get Google Client ID and Client Secret?](https://www.balbooa.com/gridbox-documentation/how-to-get-google-client-id-and-client-secret) for more information on how to create and download credentials.json.
 
 ```sh
 $ python3 gq.py -c credentails.json
 ```
-> Note: JSON file name can have any title, not need to be only as `credentials.json`
+> Note: JSON file name can be any name but the content should have the same structure as that of from Google.
 
 
 #### Add a gmail account to gq
@@ -126,10 +126,10 @@ $ python3 gq.py -u <ACCOUNT_NAME> -q <Any_Search_Query> -r -e -f json
 
 #### To use multiple credentials.json, we can use -p (profile) option
 ```sh
-$ python3 gq.py -c credentails.json -p profile1
+$ python3 gq.py -c credentails.json -p <PROFILE_NAME>
 ```
 
 To use profile other then default, we need to pass it while we do user auth process with google account
 ```sh
-$ python3 gq.py -p profile1 -u <ACCOUNT_NAME>
+$ python3 gq.py -p <PROFILE_NAME> -u <ACCOUNT_NAME>
 ```

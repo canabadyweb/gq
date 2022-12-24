@@ -11,7 +11,7 @@ import gqlib
               help="Profile for client config (Default: default)")
 @click.option("-u", "--user",
               default=None,
-              help="Gmail username")
+              help="Label for Gmail username")
 @click.option("-q", "--query",
               default="is:unread",
               help="""Gmail search query
